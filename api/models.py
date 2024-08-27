@@ -48,6 +48,7 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, password, **extra_fields)
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     slug = models.UUIDField(default=uuid.uuid4, editable=False)
     prenom = models.CharField(max_length=500, blank=True, null=True)

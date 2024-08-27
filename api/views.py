@@ -5,7 +5,8 @@ from api.serializers import *
 from api.models import *
 from rest_framework import generics
 from ast import literal_eval
-
+import csv
+from django.http import HttpResponse
 # Create your views here.
 
 
@@ -165,3 +166,22 @@ class VenteAPIListView(generics.RetrieveAPIView):
         if word:
             items = items.filter(reference=word)
         return Response(VenteSerializer(items, many=True).data)
+
+
+class ExportVenteCsv(generics.RetrieveAPIView):
+    queryset = Vente.objects.all()
+    serializer_class = VenteSerializer
+
+    def get(self, request, format=None):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="vente.csv"'
+
+        writer = csv.writer(response)
+        # Write the headers
+        writer.writerow(['Référence', 'Quantite', 'Prix Total', 'Date'])  # Replace with your model's fields
+
+        # Write data rows
+        for obj in Vente.objects.all():
+            writer.writerow([obj.reference, obj.quantite, obj.total, obj.date])  # Replace with your model's fields
+
+        return response

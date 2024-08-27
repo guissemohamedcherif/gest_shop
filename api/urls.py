@@ -20,4 +20,7 @@ urlpatterns = [
 
     # Endpoint de la liste des ventes 
     re_path(r'^ventes/$', views.VenteAPIListView.as_view()),
+
+    # Endpoint d'export des ventes
+    re_path(r'^export_ventes/$', views.ExportVenteCsv.as_view()),
 ]
